@@ -1,0 +1,38 @@
+{
+    "name": "nexus/gdpr",
+    "description": "GDPR compliance extension for Nexus DataPrivacy package",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "gdpr",
+        "data-privacy",
+        "eu-regulation",
+        "compliance",
+        "nexus"
+    ],
+    "authors": [
+        {
+            "name": "Nexus Team",
+            "email": "team@nexus.dev"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "nexus/data-privacy": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nexus\\GDPR\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Nexus\\GDPR\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
