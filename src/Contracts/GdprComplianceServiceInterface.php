@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Nexus\GDPR\Contracts;
 
 use DateTimeImmutable;
-use Nexus\DataPrivacy\ValueObjects\DataSubjectRequest;
 use Nexus\GDPR\ValueObjects\GdprDeadline;
+use Nexus\GDPR\ValueObjects\DataSubjectRequest;
 
 /**
  * Service interface for GDPR compliance operations.

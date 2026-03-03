@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Nexus\GDPR\Services;
 
 use DateTimeImmutable;
-use Nexus\DataPrivacy\Contracts\BreachRecordManagerInterface;
-use Nexus\DataPrivacy\Enums\BreachSeverity;
-use Nexus\DataPrivacy\ValueObjects\BreachRecord;
+use Nexus\GDPR\Contracts\BreachRecordManagerInterface;
 use Nexus\GDPR\Contracts\GdprBreachServiceInterface;
+use Nexus\GDPR\Enums\BreachSeverity;
+use Nexus\GDPR\ValueObjects\BreachRecord;
 use Nexus\GDPR\ValueObjects\GdprDeadline;
 
 /**

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Nexus\GDPR\ValueObjects;
 
 use DateTimeImmutable;
-use Nexus\DataPrivacy\ValueObjects\BreachRecord;
-use Nexus\DataPrivacy\ValueObjects\DataSubjectRequest;
+use Nexus\GDPR\ValueObjects\BreachRecord;
+use Nexus\GDPR\ValueObjects\DataSubjectRequest;
 
 /**
  * Represents a GDPR-compliant deadline with extension rules.

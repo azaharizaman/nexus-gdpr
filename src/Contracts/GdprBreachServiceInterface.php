@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Nexus\GDPR\Contracts;
 
 use DateTimeImmutable;
-use Nexus\DataPrivacy\ValueObjects\BreachRecord;
 use Nexus\GDPR\ValueObjects\GdprDeadline;
+use Nexus\GDPR\ValueObjects\BreachRecord;
 
 /**
  * Service interface for GDPR breach notification requirements.

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Nexus\GDPR\Services;
 
 use DateTimeImmutable;
-use Nexus\DataPrivacy\Contracts\DataSubjectRequestManagerInterface;
-use Nexus\DataPrivacy\Enums\RequestStatus;
-use Nexus\DataPrivacy\ValueObjects\DataSubjectRequest;
+use Nexus\GDPR\Contracts\DataSubjectRequestManagerInterface;
 use Nexus\GDPR\Contracts\GdprComplianceServiceInterface;
+use Nexus\GDPR\Enums\RequestStatus;
 use Nexus\GDPR\Exceptions\GdprException;
+use Nexus\GDPR\ValueObjects\DataSubjectRequest;
 use Nexus\GDPR\ValueObjects\GdprDeadline;
 
 /**
