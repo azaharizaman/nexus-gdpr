@@ -58,8 +58,8 @@ final readonly class BreachRecord
         }
 
         foreach ($list as $element) {
-            if (!is_string($element)) {
-                throw new \InvalidArgumentException("Every element of {$propertyName} must be a string");
+            if (!is_string($element) || trim($element) === '') {
+                throw new \InvalidArgumentException("Every element of {$propertyName} must be a non-empty string");
             }
         }
     }

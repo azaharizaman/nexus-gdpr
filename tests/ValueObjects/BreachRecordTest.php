@@ -28,7 +28,7 @@ final class BreachRecordTest extends TestCase
     public function test_it_throws_exception_for_non_string_elements_in_data_categories(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Every element of dataCategories must be a string');
+        $this->expectExceptionMessage('Every element of dataCategories must be a non-empty string');
 
         new BreachRecord(
             id: 'breach-1',
@@ -56,7 +56,7 @@ final class BreachRecordTest extends TestCase
     public function test_it_throws_exception_for_non_string_elements_in_containment_actions(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Every element of containmentActions must be a string');
+        $this->expectExceptionMessage('Every element of containmentActions must be a non-empty string');
 
         new BreachRecord(
             id: 'breach-1',
@@ -64,6 +64,34 @@ final class BreachRecordTest extends TestCase
             severity: BreachSeverity::HIGH,
             discoveredAt: new DateTimeImmutable(),
             containmentActions: [new \stdClass()] // @phpstan-ignore-line
+        );
+    }
+
+    public function test_it_throws_exception_for_empty_string_elements_in_data_categories(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Every element of dataCategories must be a non-empty string');
+
+        new BreachRecord(
+            id: 'breach-1',
+            description: 'Test description',
+            severity: BreachSeverity::HIGH,
+            discoveredAt: new DateTimeImmutable(),
+            dataCategories: ['email', '  ', 'phone']
+        );
+    }
+
+    public function test_it_throws_exception_for_empty_string_elements_in_containment_actions(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Every element of containmentActions must be a non-empty string');
+
+        new BreachRecord(
+            id: 'breach-1',
+            description: 'Test description',
+            severity: BreachSeverity::HIGH,
+            discoveredAt: new DateTimeImmutable(),
+            containmentActions: ['Isolated server', '']
         );
     }
 
