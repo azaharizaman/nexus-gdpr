@@ -24,6 +24,14 @@ final readonly class BreachRecord
         public int $recordsAffected = 0,
         public array $containmentActions = []
     ) {
+        if (trim($this->id) === '') {
+            throw new \InvalidArgumentException('BreachRecord ID cannot be empty or whitespace only');
+        }
+
+        if (trim($this->description) === '') {
+            throw new \InvalidArgumentException('BreachRecord description cannot be empty or whitespace only');
+        }
+
         if ($this->regulatoryNotified && $this->regulatoryNotifiedAt === null) {
             throw new \InvalidArgumentException('regulatoryNotifiedAt must be set if regulatoryNotified is true');
         }

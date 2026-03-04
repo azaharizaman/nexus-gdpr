@@ -21,5 +21,11 @@ final readonly class DataSubjectRequest
         if (trim($this->id) === '') {
             throw new \InvalidArgumentException('DataSubjectRequest ID cannot be empty or whitespace only');
         }
+
+        foreach (array_keys($this->metadata) as $key) {
+            if (!is_string($key)) {
+                throw new \InvalidArgumentException('All metadata keys must be strings');
+            }
+        }
     }
 }
