@@ -43,5 +43,24 @@ final readonly class BreachRecord
         if ($this->recordsAffected < 0) {
             throw new \InvalidArgumentException('recordsAffected must be greater than or equal to 0');
         }
+
+        $this->validateList($this->dataCategories, 'dataCategories');
+        $this->validateList($this->containmentActions, 'containmentActions');
+    }
+
+    /**
+     * @param array<mixed> $list
+     */
+    private function validateList(array $list, string $propertyName): void
+    {
+        if (!array_is_list($list)) {
+            throw new \InvalidArgumentException("{$propertyName} must be a sequential list");
+        }
+
+        foreach ($list as $element) {
+            if (!is_string($element)) {
+                throw new \InvalidArgumentException("Every element of {$propertyName} must be a string");
+            }
+        }
     }
 }

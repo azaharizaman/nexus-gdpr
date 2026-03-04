@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Nexus\GDPR\Tests\Services;
 
 use DateTimeImmutable;
-use Nexus\DataPrivacy\Contracts\BreachRecordManagerInterface;
-use Nexus\DataPrivacy\Enums\BreachSeverity;
-use Nexus\DataPrivacy\Enums\DataCategory;
-use Nexus\DataPrivacy\ValueObjects\BreachRecord;
+use Nexus\GDPR\Contracts\BreachRecordManagerInterface;
+use Nexus\GDPR\Enums\BreachSeverity;
 use Nexus\GDPR\Services\GdprBreachService;
+use Nexus\GDPR\ValueObjects\BreachRecord;
 use Nexus\GDPR\ValueObjects\GdprDeadline;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -39,31 +38,21 @@ final class GdprBreachServiceTest extends TestCase
         ?DateTimeImmutable $discoveredAt = null,
         bool $regulatoryNotified = false,
         ?DateTimeImmutable $regulatoryNotifiedAt = null,
-        string $description = 'Test breach description with sufficient detail',
+        string $description = 'Test breach description with sufficient detail. It must be at least fifty characters long to be valid.',
         int $recordsAffected = 100,
-        array $dataCategories = null,
-        ?string $containmentActions = 'Isolated systems',
+        ?array $dataCategories = null,
+        ?array $containmentActions = null,
     ): BreachRecord {
         return new BreachRecord(
             id: $id,
-            title: 'Test Breach',
+            description: $description,
             severity: $severity,
             discoveredAt: $discoveredAt ?? new DateTimeImmutable(),
-            occurredAt: ($discoveredAt ?? new DateTimeImmutable())->modify('-1 day'),
-            recordsAffected: $recordsAffected,
-            dataCategories: $dataCategories ?? [DataCategory::CONTACT],
-            description: $description,
-            cause: 'Unauthorized access',
-            containmentActions: $containmentActions,
             regulatoryNotified: $regulatoryNotified,
             regulatoryNotifiedAt: $regulatoryNotifiedAt,
-            individualsNotified: false,
-            individualsNotifiedAt: null,
-            containedAt: false,
-            resolvedAt: null,
-            reportedBy: 'security@example.com',
-            incidentManager: null,
-            metadata: [],
+            dataCategories: $dataCategories ?? ['Contact info'],
+            recordsAffected: $recordsAffected,
+            containmentActions: $containmentActions ?? ['Isolated systems']
         );
     }
 
@@ -252,7 +241,7 @@ final class GdprBreachServiceTest extends TestCase
     #[Test]
     public function validate_breach_documentation_returns_error_for_missing_mitigation(): void
     {
-        $breach = $this->createBreach('breach-1', containmentActions: null);
+        $breach = $this->createBreach('breach-1', containmentActions: []);
 
         $errors = $this->service->validateBreachDocumentation($breach);
 
@@ -279,7 +268,7 @@ final class GdprBreachServiceTest extends TestCase
         $breach = $this->createBreach(
             'breach-1',
             severity: BreachSeverity::HIGH,
-            description: 'A security breach occurred involving unauthorized access to personal data'
+            description: 'A security breach occurred involving unauthorized access to personal data. It must be at least fifty characters long to be valid.'
         );
 
         $errors = $this->service->validateBreachDocumentation($breach);
@@ -295,7 +284,7 @@ final class GdprBreachServiceTest extends TestCase
         $breach = $this->createBreach(
             'breach-1',
             severity: BreachSeverity::HIGH,
-            description: 'A breach occurred with significant impact on data subjects including identity theft risk and financial consequences for affected users'
+            description: 'A breach occurred with significant impact on data subjects including identity theft risk and financial consequences for affected users. It must be at least fifty characters long to be valid.'
         );
 
         $errors = $this->service->validateBreachDocumentation($breach);
@@ -336,10 +325,6 @@ final class GdprBreachServiceTest extends TestCase
             ->method('getUnresolvedBreaches')
             ->willReturn([]);
 
-        $this->breachManager
-            ->method('getAllBreaches')
-            ->willReturn([]);
-
         $summary = $this->service->getNotificationComplianceSummary();
 
         $this->assertIsArray($summary);
@@ -373,10 +358,6 @@ final class GdprBreachServiceTest extends TestCase
         $this->breachManager
             ->method('getUnresolvedBreaches')
             ->willReturn([$pendingBreach, $lowBreach]);
-
-        $this->breachManager
-            ->method('getAllBreaches')
-            ->willReturn([$notifiedBreach, $pendingBreach, $lowBreach]);
 
         $summary = $this->service->getNotificationComplianceSummary();
 

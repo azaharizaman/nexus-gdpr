@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Nexus\GDPR\Tests\ValueObjects;
 
 use DateTimeImmutable;
-use Nexus\DataPrivacy\Enums\BreachSeverity;
-use Nexus\DataPrivacy\Enums\DataCategory;
-use Nexus\DataPrivacy\Enums\RequestStatus;
-use Nexus\DataPrivacy\Enums\RequestType;
-use Nexus\DataPrivacy\ValueObjects\BreachRecord;
-use Nexus\DataPrivacy\ValueObjects\DataSubjectId;
-use Nexus\DataPrivacy\ValueObjects\DataSubjectRequest;
+use Nexus\GDPR\Enums\BreachSeverity;
+use Nexus\GDPR\Enums\DataSubjectRequestType;
+use Nexus\GDPR\Enums\RequestStatus;
+use Nexus\GDPR\ValueObjects\BreachRecord;
+use Nexus\GDPR\ValueObjects\DataSubjectRequest;
 use Nexus\GDPR\ValueObjects\GdprDeadline;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -25,20 +23,11 @@ final class GdprDeadlineTest extends TestCase
      */
     private function createRequest(DateTimeImmutable $submittedAt): DataSubjectRequest
     {
-        $deadline = $submittedAt->modify('+30 days');
-
         return new DataSubjectRequest(
             id: 'request-' . uniqid(),
-            dataSubjectId: new DataSubjectId('user-test-123'),
-            type: RequestType::ACCESS,
+            type: DataSubjectRequestType::ACCESS,
             status: RequestStatus::PENDING,
             submittedAt: $submittedAt,
-            deadline: $deadline,
-            completedAt: null,
-            assignedTo: null,
-            description: null,
-            responseNotes: null,
-            rejectionReason: null,
             metadata: [],
         );
     }
@@ -50,24 +39,14 @@ final class GdprDeadlineTest extends TestCase
     {
         return new BreachRecord(
             id: 'breach-' . uniqid(),
-            title: 'Test Breach',
+            description: 'Test breach description with sufficient length for validation requirements.',
             severity: BreachSeverity::HIGH,
             discoveredAt: $discoveredAt,
-            occurredAt: $discoveredAt->modify('-1 day'),
-            recordsAffected: 100,
-            dataCategories: [DataCategory::CONTACT],
-            description: 'Test breach description',
-            cause: 'Unauthorized access',
-            containmentActions: 'Isolated systems',
             regulatoryNotified: false,
             regulatoryNotifiedAt: null,
-            individualsNotified: false,
-            individualsNotifiedAt: null,
-            containedAt: false,
-            resolvedAt: null,
-            reportedBy: 'security@example.com',
-            incidentManager: null,
-            metadata: [],
+            dataCategories: ['Contact'],
+            recordsAffected: 100,
+            containmentActions: ['Isolated systems']
         );
     }
 

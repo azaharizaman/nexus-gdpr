@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Nexus\GDPR\Tests\Services;
 
 use DateTimeImmutable;
-use Nexus\DataPrivacy\Contracts\DataSubjectRequestManagerInterface;
-use Nexus\DataPrivacy\Enums\RequestStatus;
-use Nexus\DataPrivacy\Enums\RequestType;
-use Nexus\DataPrivacy\ValueObjects\DataSubjectId;
-use Nexus\DataPrivacy\ValueObjects\DataSubjectRequest;
+use Nexus\GDPR\Contracts\DataSubjectRequestManagerInterface;
+use Nexus\GDPR\Enums\DataSubjectRequestType;
+use Nexus\GDPR\Enums\RequestStatus;
 use Nexus\GDPR\Exceptions\GdprException;
 use Nexus\GDPR\Services\GdprComplianceService;
+use Nexus\GDPR\ValueObjects\DataSubjectRequest;
 use Nexus\GDPR\ValueObjects\GdprDeadline;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -37,26 +36,16 @@ final class GdprComplianceServiceTest extends TestCase
     private function createRequest(
         string $id,
         ?DateTimeImmutable $submittedAt = null,
-        ?DateTimeImmutable $deadline = null,
         RequestStatus $status = RequestStatus::PENDING,
-        ?DateTimeImmutable $completedAt = null,
         array $metadata = [],
     ): DataSubjectRequest {
         $submitted = $submittedAt ?? new DateTimeImmutable();
-        $deadlineDate = $deadline ?? $submitted->modify('+30 days');
 
         return new DataSubjectRequest(
             id: $id,
-            dataSubjectId: new DataSubjectId('user-' . $id),
-            type: RequestType::ACCESS,
+            type: DataSubjectRequestType::ACCESS,
             status: $status,
             submittedAt: $submitted,
-            deadline: $deadlineDate,
-            completedAt: $completedAt,
-            assignedTo: null,
-            description: null,
-            responseNotes: null,
-            rejectionReason: null,
             metadata: $metadata,
         );
     }
@@ -140,7 +129,6 @@ final class GdprComplianceServiceTest extends TestCase
             'req-1',
             submittedAt: $submittedAt,
             status: RequestStatus::COMPLETED,
-            completedAt: $submittedAt->modify('+20 days')
         );
 
         $this->assertFalse($this->service->isOverdue($request));
