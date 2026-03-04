@@ -17,5 +17,9 @@ final readonly class DataSubjectRequest
         public RequestStatus $status,
         public DateTimeImmutable $submittedAt,
         public array $metadata = []
-    ) {}
+    ) {
+        if (trim($this->id) === '') {
+            throw new \InvalidArgumentException('DataSubjectRequest ID cannot be empty or whitespace only');
+        }
+    }
 }

@@ -23,5 +23,17 @@ final readonly class BreachRecord
         public array $dataCategories = [],
         public int $recordsAffected = 0,
         public array $containmentActions = []
-    ) {}
+    ) {
+        if ($this->regulatoryNotified && $this->regulatoryNotifiedAt === null) {
+            throw new \InvalidArgumentException('regulatoryNotifiedAt must be set if regulatoryNotified is true');
+        }
+
+        if (!$this->regulatoryNotified && $this->regulatoryNotifiedAt !== null) {
+            throw new \InvalidArgumentException('regulatoryNotifiedAt must be null if regulatoryNotified is false');
+        }
+
+        if ($this->recordsAffected < 0) {
+            throw new \InvalidArgumentException('recordsAffected must be greater than or equal to 0');
+        }
+    }
 }
