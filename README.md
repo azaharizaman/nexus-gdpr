@@ -15,7 +15,7 @@
 ## Installation
 
 ```bash
-composer require nexus/gdpr
+composer require azaharizaman/nexus-gdpr
 ```
 
 ## Key Features
